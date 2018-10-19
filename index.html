@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="1.js"></script>
+    <script>
+        document.addEventListener('copy', function(e) {
+            e.clipboardData.setData('text/plain', 'str');
+            e.preventDefault();
+        });
+
+        document.addEventListener('paste', function(e) {
+            let text = clipboardData.getData('Text');
+
+            console.log(text);
+            // e.clipboardData.setData('text/plain', str);
+            // e.preventDefault();
+        });
+
+        
+
+        function copy(ob) {
+            document.execCommand("copy");
+            return
+            var obj = findObj(ob);
+            if (obj) {
+                obj.select();
+                js = obj.createTextRange();
+                js.execCommand("Copy");
+            }
+        }
+        function paste(ob) {
+            document.execCommand("paste");
+            return
+
+            var obj = findObj(ob);
+            if (obj) {
+                obj.select();
+                js = obj.createTextRange();
+                js.execCommand("Paste");
+            }
+        }
+        function cut(ob) {
+            var obj = findObj(ob);
+            if (obj) {
+                obj.select();
+                js = obj.createTextRange();
+                js.execCommand("Cut");
+            }
+        }
+        function findObj(n, d) { //v4.0
+            var p, i, x; if (!d) d = document;
+            if ((p = n.indexOf("?")) > 0 && parent.frames.length) {
+                d = parent.frames[n.substring(p + 1)
+                ].document; n = n.substring(0, p);
+            }
+            if (!(x = d[n]) && d.all) {
+                x = d.all[n];
+            }
+            for (i = 0; !x && i < d.forms.length; i++) {
+                x = d.forms[i][n];
+            }
+            for (i = 0; !x && d.layers && i < d.layers.length; i++) {
+                x = findObj(n, d.layers[i].document);
+            }
+            if (!x && document.getElementById) {
+                x = document.getElementById(n);
+            }
+            return x;
+        }
+
+        function traditionalized(cc) {
+            var str = '';
+            for (var i = 0; i < cc.length; i++) {
+                if (simpPYStr.indexOf(cc.charAt(i)) != -1)
+                    str += ftPYStr.charAt(simpPYStr.indexOf(cc.charAt(i)));
+                else if (qqPYStr.indexOf(cc.charAt(i)) != -1)
+                    str += ftPYStr.charAt(qqPYStr.indexOf(cc.charAt(i)));
+                else
+                    str += cc.charAt(i);
+            }
+            return str;
+        }
+        function simplized(cc) {
+            var str = '';
+            for (var i = 0; i < cc.length; i++) {
+                if (ftPYStr.indexOf(cc.charAt(i)) != -1)
+                    str += simpPYStr.charAt(ftPYStr.indexOf(cc.charAt(i)));
+                else if (qqPYStr.indexOf(cc.charAt(i)) != -1)
+                    str += simpPYStr.charAt(qqPYStr.indexOf(cc.charAt(i)));
+                else
+                    str += cc.charAt(i);
+            }
+            return str;
+        }
+        function qqlized(cc) {
+            var str = '';
+            for (var i = 0; i < cc.length; i++) {
+                if (ftPYStr.indexOf(cc.charAt(i)) != -1)
+                    str += qqPYStr.charAt(ftPYStr.indexOf(cc.charAt(i)));
+                else if (simpPYStr.indexOf(cc.charAt(i)) != -1)
+                    str += qqPYStr.charAt(simpPYStr.indexOf(cc.charAt(i)));
+                else
+                    str += cc.charAt(i);
+            }
+            return str;
+        }
+        function convert(nOption) {
+            if (nOption == 0) //转换成简体
+                txt.value = simplized(txt.value);
+            if (nOption == 1)
+                txt.value = traditionalized(txt.value); //转换成繁体
+            if (nOption == 2)
+                txt.value = qqlized(txt.value); //转换成qq个性繁体
+        }
+
+        document.onclick = function (argument) {
+            // document.execCommand('print')
+            console.log(document.execCommand('SaveAs'));
+
+            // document.execCommand('open')
+        }
+    </script>
+    <table bordercolor="#6699cc" cellspacing="0" cellpadding="0" width="700" align="center" border="1">
+        <tbody>
+            <tr>
+                <td valign="top" width="99%" bgcolor="#6699cc">
+                    <p align="center">
+                        <font color="#ffffff"><strong>汉字简体繁体转换</strong></font>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" width="99%" height="15"  align="center">
+                    <div style="padding: 32px;">
+                        <input onclick="paste('txt')" type="button" value="粘 贴">
+                        <input onclick="convert(0)" type="button" value="转化为简体">
+                        <input onclick="convert(1)" type="button" value="转化为繁体">
+                        <input onclick="convert(2)" type="button" value="转化为QQ繁体">
+                        <input onclick="copy('txt')" type="button" value="复 制">
+                        <input onclick="cut('txt')" type="button" value="剪 切">
+                        <input onclick="txt.value='';txt.focus();" type="button" value="清 空">
+                        <br><br>
+                        <textarea id="txt" rows="15" cols="80" value=""></textarea>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
