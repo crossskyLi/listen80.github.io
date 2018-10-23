@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Cube</title>
+  <style>
+  .wrap {
+    perspective: 1800px;
+  }
+
+  .cube {
+    transform-style: preserve-3d;
+    width: 200px;
+    height: 200px;
+    margin: 400px auto;
+    perspective-origin: center;
+  }
+
+  .cube>div {
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 1);
+    position: absolute;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 12px;
+    transform-origin: center;
+    transition: all 1s ease;
+    backface-visibility: hidden;
+  }
+
+  .left {
+    transform: translate3d(-100px, 0, 0px) rotateX(0deg) rotateY(90deg);
+  }
+
+  .right {
+    transform: translate3d(100px, 0, 0px) rotateX(0deg) rotateY(-90deg);
+  }
+
+  .top {
+    transform: translate3d(00px, -100px, 0px) rotateX(90deg) rotateY(0deg);
+  }
+
+  .bottom {
+    transform: translate3d(00px, 100px, 0px) rotateX(-90deg) rotateY(0deg);
+  }
+
+  .back {
+    transform: translate3d(0px, 0, -100px) rotateX(0deg) rotateY(180deg);
+  }
+
+  .front {
+    transform: translate3d(0px, 0px, 100px) rotateX(0deg) rotateY(0deg);
+  }
+
+  body {
+    overflow: hidden;
+    background-color: #eee;
+  }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+  </div>
+  <script>
+  let size = 200;
+  let deg = 90;
+  let cube = document.createElement('div');
+  cube.classList.add('cube');
+  [-1, 1].forEach((vvvv) => {
+    [0, 1, 2].forEach((value) => {
+      // 左 上 后
+      // 右 下 前
+      let backgroundColor = ["#FFF", "#FD2429", "#F60", "#0BBB1D", "#06C", "#FF0"][1.5 * vvvv + 1.5 + value];
+      let data = ['left', 'top', 'back', 'right', 'bottom', 'front'][1.5 * vvvv + 1.5 + value];
+      [-1, 0, 1].forEach((line) => {
+        [-1, 0, 1].forEach((col) => {
+          let a = [col, line];
+          a.splice(value, 0, vvvv * 1.5)
+          let deg1 = 0,
+            deg2 = 0;
+          if (value === 0) {
+            deg2 = vvvv
+          } else if (value === 1) {
+            deg1 = -vvvv
+          } else if (value === 2) {
+            deg2 = 1 - vvvv
+          }
+          let el = document.createElement('div');
+          el.style.transform = `translate3d(${a[0] * size}px, ${a[1] * size}px, ${a[2] * size}px) rotateX(${deg1 * deg}deg) rotateY(${deg2 * deg}deg)`
+          el.style.backgroundColor = `${backgroundColor}`
+          el.setAttribute('key', `${data + ', ' + line + ', ' + col}`)
+          el.color = `${backgroundColor}`
+          cube.appendChild(el)
+        })
+      })
+    })
+  })
+  cube.onclick = function(e) {
+    if (e.target) {
+      // console.log(this, e.target)
+    }
+  }
+  let [status, x, y, rotateX, rotateY] = [0, 0, 0, 0, 0]
+  document.onmousedown = function(e) {
+    status = 1, x = e.x, y = e.y;
+    return false
+  }
+  document.onmouseup = function(e) {
+    rotateX += -(e.y - y)
+    rotateY += e.x - x
+    status = 0
+  }
+  document.onmousemove = function(e) {
+    if (status) {
+      cube.style.transform = `rotateX(${rotateX - (e.y - y)}deg) rotateY(${rotateY + e.x - x}deg) translateX(0px) translateY(0px) translateZ(0px)`
+    }
+  }
+  document.querySelector('.wrap').appendChild(cube);
+  </script>
+</body>
+
+</html>

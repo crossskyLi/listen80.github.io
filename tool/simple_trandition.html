@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>简繁转换</title>
+</head>
+
+<body>
+    <table bordercolor="#6699cc" cellspacing="0" cellpadding="0" width="700" align="center" border="1">
+        <tbody>
+            <tr>
+                <td valign="top" bgcolor="#6699cc">
+                    <p align="center">
+                        <font color="#ffffff"><strong>汉字简体繁体转换</strong></font>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" align="center">
+                    <div>
+                        <br>
+                        <input onclick="paste()" type="button" value="粘 贴">
+                        <input onclick="copy(txt.value)" type="button" value="复 制">
+                        <input onclick="convert(0)" type="button" value="转化为简体">
+                        <input onclick="convert(1)" type="button" value="转化为繁体">
+                        <input onclick="convert(2)" type="button" value="转化为QQ繁体">
+                        <br><br>
+                        <textarea id="txt" rows="15" cols="80" value=""></textarea>
+                        <br><br>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="pystr.js"></script>
+    <script>
+        function copy(str) {
+            function c(e) {
+                e.clipboardData.setData('text/plain', str);
+                e.preventDefault();
+            }
+            document.addEventListener('copy', c);
+            document.execCommand("copy");
+            document.removeEventListener('copy', c);
+        }
+
+        function findInStr(transferStr, str, char) {
+            var index = str.indexOf(char);
+            if (~index) {
+                return transferStr.charAt(index);
+            }
+        }
+
+        function traditionalized(cc) {
+            var str = '', char;
+            for (var i = 0; i < cc.length; i++) {
+                char = cc.charAt(i);
+                str += findInStr(ftPYStr, simpPYStr, char) || findInStr(ftPYStr, qqPYStr, char) || char;
+            }
+            return str;
+        }
+
+        function simplized(cc) {
+            var str = '', char;
+            for (var i = 0; i < cc.length; i++) {
+                char = cc.charAt(i);
+                str += findInStr(simpPYStr, ftPYStr, char) || findInStr(simpPYStr, qqPYStr, char) || char;
+            }
+            return str;
+        }
+
+        function qqlized(cc) {
+            var str = '', char;
+            for (var i = 0; i < cc.length; i++) {
+                char = cc.charAt(i);
+                str += findInStr(qqPYStr, ftPYStr, char) || findInStr(qqPYStr, simpPYStr, char) || char;
+            }
+            return str;
+        }
+
+        function convert(nOption) {
+            if (nOption == 0)
+                txt.value = simplized(txt.value); //转换成简体
+            else if (nOption == 1)
+                txt.value = traditionalized(txt.value); //转换成繁体
+            else if (nOption == 2)
+                txt.value = qqlized(txt.value); //转换成qq个性繁体
+        }
+    </script>
+</body>
+
+</html>

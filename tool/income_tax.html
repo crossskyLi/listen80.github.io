@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>个人所得税</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type="text/css">
+  table {
+    margin: auto;
+    border-collapse: collapse;
+    word-wrap: normal;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  td {
+    border: 1px solid #ccc;
+    padding: 8px 8px;
+  }
+
+  input {
+    width: 72px;
+  }
+
+  ol {
+    margin: 0;
+    line-height: 18px;
+    max-height: 90px;
+    overflow-y: auto;
+  }
+  .wrap {
+    max-width: 360px;
+    margin: auto;
+  }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <table>
+      <tr>
+        <td>税前工资</td>
+        <td>
+          <input type="text" id="txtIncome" style="vertical-align: top;" value="20000">
+        </td>
+      </tr>
+      <tr>
+        <td>起 征 点</td>
+        <td>
+          <input type="text" id="txtBaseLine" style="vertical-align: top;" value="3500" disabled>
+        </td>
+      </tr>
+      <tr>
+        <td>五险一金</td>
+        <td>
+          <input type="text" id="txtInsure" style="vertical-align: top;" value="0" disabled>
+        </td>
+      </tr>
+      <tr>
+        <td>应纳税额</td>
+        <td>
+          <input type="text" id="txtTax" style="vertical-align: top;" value="0" disabled>
+        </td>
+      </tr>
+      <tr>
+        <td>税后工资</td>
+        <td>
+          <input type="text" id="txtIncomeAT" style="vertical-align: top;" value="0" disabled>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <input type="button" id="button" style="vertical-align: top;" value="计算">
+        </td>
+      </tr>
+    </table>
+    <p>税率表</p>
+    <table>
+      <tr>
+        <td>全月应纳税所得额</td>
+        <td>税率</td>
+        <td>速算扣除数（元）</td>
+      </tr>
+      <tr>
+        <td>不超过1500元</td>
+        <td>3%</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>超过1500元至4500元</td>
+        <td>10%</td>
+        <td>105</td>
+      </tr>
+      <tr>
+        <td>超过4500元至9000元</td>
+        <td>20%</td>
+        <td>555</td>
+      </tr>
+      <tr>
+        <td>超过9000元至35000元</td>
+        <td>25%</td>
+        <td>1005</td>
+      </tr>
+      <tr>
+        <td>超过35000元至55000元</td>
+        <td>30%</td>
+        <td>2755</td>
+      </tr>
+      <tr>
+        <td>超过55000元至80000元</td>
+        <td>35%</td>
+        <td>5505</td>
+      </tr>
+      <tr>
+        <td>超过80000元</td>
+        <td>45%</td>
+        <td>13505</td>
+      </tr>
+    </table>
+  </div>
+  <script>
+  txtIncome = document.getElementById('txtIncome')
+  txtTax = document.getElementById('txtTax')
+  txtIncomeAT = document.getElementById('txtIncomeAT')
+  txtBaseLine = document.getElementById('txtBaseLine')
+  txtInsure = document.getElementById('txtInsure')
+  button = document.getElementById('button')
+  var rates = {
+    .03: 1500,
+    .1: 4500,
+    .2: 9000,
+    .25: 35000,
+    .3: 55000,
+    .35: 80000,
+    .45: Infinity
+  }
+  function calc() {
+    var value = txtIncome.value - txtBaseLine.value
+    var tax = 0
+    var last = 0
+    if (value >= 0) {
+      txtInsure.value = txtIncome.value * (0.02 + 0.08 + .12) + 3 + 2200 * 0.002
+      value = value - txtInsure.value
+      for (var rate in rates) {
+        erdu = rates[rate]
+        if (value > erdu) {
+          tax += (erdu - last) * rate
+          last = erdu
+        } else {
+          tax += (value - last) * rate
+          break
+        }
+      }
+      txtTax.value = tax.toFixed(2)
+      txtIncomeAT.value = (value - tax + (txtBaseLine.value - 0)).toFixed(2)
+    } else {
+      txtInsure.value = 0
+      txtTax.value = 0
+      txtIncomeAT.value = 0
+    }
+  }
+  txtIncome.onkeyup = calc
+  calc()
+  </script>
+</body>
+
+</html>

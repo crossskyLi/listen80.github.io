@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Ozg JSNES</title>
+  <style>
+  #emulator {
+    text-align: center;
+    width: 512px;
+    margin: auto;
+  }
+  .nes-roms {
+    height: 200px;
+    overflow: auto;
+    border: 1px solid;
+    margin: 10px 0;
+  }
+  ol {
+    margin: 0;
+  }
+  li {
+    border-bottom: 1px solid #eee;
+    line-height: 1.5;
+  }
+  input {
+    margin: 0 5px;
+  }
+  .active {
+    color: #ff5050;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="emulator"></div>
+  <script src="require.js" data-main="js/index.js"></script>
+</body>
+
+</html>
