@@ -13,16 +13,13 @@
     max-width: 100%;
     width: 100%;
   }
-
   td {
     border: 1px solid #ccc;
     padding: 8px 8px;
   }
-
   input {
     width: 72px;
   }
-
   ol {
     margin: 0;
     line-height: 18px;
@@ -33,6 +30,9 @@
     max-width: 360px;
     margin: auto;
   }
+  input {
+    vertical-align: top;
+  }
   </style>
 </head>
 
@@ -42,37 +42,37 @@
       <tr>
         <td>税前工资</td>
         <td>
-          <input type="text" id="txtIncome" style="vertical-align: top;" value="20000">
+          <input type="text" id="txtIncome" value="20000">
         </td>
       </tr>
       <tr>
         <td>起 征 点</td>
         <td>
-          <input type="text" id="txtBaseLine" style="vertical-align: top;" value="3500" disabled>
+          <input type="text" id="txtBaseLine" value="3500" disabled>
         </td>
       </tr>
       <tr>
         <td>五险一金</td>
         <td>
-          <input type="text" id="txtInsure" style="vertical-align: top;" value="0" disabled>
+          <input type="text" id="txtInsure" value="0" disabled>
         </td>
       </tr>
       <tr>
         <td>应纳税额</td>
         <td>
-          <input type="text" id="txtTax" style="vertical-align: top;" value="0" disabled>
+          <input type="text" id="txtTax" value="0" disabled>
         </td>
       </tr>
       <tr>
         <td>税后工资</td>
         <td>
-          <input type="text" id="txtIncomeAT" style="vertical-align: top;" value="0" disabled>
+          <input type="text" id="txtIncomeAT" value="0" disabled>
         </td>
       </tr>
       <tr>
         <td></td>
         <td>
-          <input type="button" id="button" style="vertical-align: top;" value="计算">
+          <input type="button" id="button" value="计算">
         </td>
       </tr>
     </table>
@@ -121,12 +121,6 @@
     </table>
   </div>
   <script>
-  txtIncome = document.getElementById('txtIncome')
-  txtTax = document.getElementById('txtTax')
-  txtIncomeAT = document.getElementById('txtIncomeAT')
-  txtBaseLine = document.getElementById('txtBaseLine')
-  txtInsure = document.getElementById('txtInsure')
-  button = document.getElementById('button')
   var rates = {
     .03: 1500,
     .1: 4500,
