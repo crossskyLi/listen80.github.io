@@ -3,7 +3,7 @@ var html = '';
 var entry = document.querySelector('.entry');
 projects.forEach(function(v, i) {
   var shadow = "<div class='shadow' style='background-image:-webkit-linear-gradient(top, rgba(255, 255, 255, 0), rgba(255, 255, 255, .5))'><span>" + v + "</span></div>";
-  var link = "<a href='" + v.toLowerCase() + "/' target='_blank'>" + v + "</a>";
+  var link = "<a href='javascript:;' target='_blank'>" + v + "</a>";
   html += "<div class='card'>" + link + shadow + "</div>";
 })
 
