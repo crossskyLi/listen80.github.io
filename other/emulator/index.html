@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Ozg JSNES</title>
+  <style>
+  #emulator {
+    text-align: center;
+    width: 512px;
+    margin: auto;
+  }
+  .nes-roms {
+    height: 200px;
+    overflow: auto;
+    border: 1px solid;
+    margin: 10px 0;
+  }
+  ol {
+    margin: 0;
+  }
+  li {
+    border-bottom: 1px solid #eee;
+    line-height: 1.5;
+  }
+  input {
+    margin: 0 5px;
+  }
+  .active {
+    color: #ff5050;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="emulator"></div>
+  <script src="js/lib/jquery.min.js"></script>
+  <script src="js/lib/dynamicaudio-min.js"></script>
+  <script src="js/jsnes/nes.js"></script>
+  <script src="js/jsnes/utils.js"></script>
+  <script src="js/jsnes/cpu.js"></script>
+  <script src="js/jsnes/keyboard.js"></script>
+  <script src="js/jsnes/mappers.js"></script>
+  <script src="js/jsnes/papu.js"></script>
+  <script src="js/jsnes/ppu.js"></script>
+  <script src="js/jsnes/rom.js"></script>
+  <script src="js/jsnes/ui.js"></script>
+  <script>
+    $.get('roms.json').then(function (data) {
+      var roms = data.roms.map(v => [v.replace('.nes', ''), 'roms/' + v])
+      var ui = $('#emulator').JSNESUI(roms)
+      var nes = new JSNES({
+        ui: ui
+      });
+    })
+   
+  </script>
+</body>
+
+</html>
