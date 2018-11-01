@@ -11,11 +11,11 @@ var mines = function(){
 	var w, h, mines, flags, space, isFirst, initStatus;
 	var game;
 
-	function start() {
-
+	function start(_) {
+		setConfig(_)
 		if(!initStatus) {
-			initStatus = 1;
-			init();
+			initStatus = true;
+			bindDom();
 		}
 
 		w = config.width,
@@ -409,13 +409,8 @@ var mines = function(){
 
 	}
 
-	function init() {
-		bindDom();
-	}
-
 	return {
-		start: start,
-		config: setConfig
+		start: start
 	}
 }();
 
