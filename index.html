@@ -16,16 +16,50 @@
       text-align: center;
       float: left;
     }
+    body {
+      background-color: #002;
+      background-image: radial-gradient(circle at center, #045, #002);
+      color: #fff;
+      font: 1em "Open Sans", sans-serif;
+      height: 100vh;
+      line-height: 1.5;
+    }
     .my-link {
       font-size: 18px;
       text-decoration: none;
       display: inline-block;
-      background-color: #ccc;
-      width: 80%;
-      height: 88px;
-      line-height: 88px;
-      border-radius: 10px;
+      /*background-color: #ccc;*/
+      /*width: 80%;*/
+      width: 128px;
+      height: 128px;
+      line-height: 128px;
+      /*border-radius: 10px;*/
       overflow: hidden;
+    }
+    a {
+      box-shadow: 0 0 10px 0.1em #0cf, 0 0 4px 0.1em #0cf inset, 0 0 1em #0cf inset;
+      color: currentColor;
+      display: inline-block;
+      text-decoration: none;
+      transition: transform 0.1s linear,  box-shadow 0.15s linear,  margin 0.1s linear,  width 0.1s linear,  height 0.1s linear;
+      border-radius: 50%;
+      position: relative;
+    }
+    a:hover {
+      transform: scale(1.1);
+    }
+    a:before {
+      background-color: #fff;
+      border-radius: 50%;
+      content: "";
+      display: block;
+      opacity: 0.5;
+      position: absolute;
+      top: 1.2em;
+      left: 1.3em;
+      width: 1.5em;
+      height: 0.5em;
+      transform: rotate(-45deg);
     }
   </style>
 </head>
