@@ -4,101 +4,105 @@
 <head>
   <title>Listen</title>
   <style>
-    .row {
-      width: 1200px;
-      overflow: hidden;
-      margin: auto;
-    }
-    .block {
-      width: 20%;
-      margin-top: 20px;
-      display: inline-block;
-      text-align: center;
-      float: left;
-    }
-    body {
-      background-color: #002;
-      background-image: radial-gradient(circle at center, #045, #002);
-      color: #fff;
-      font: 1em "Open Sans", sans-serif;
-      height: 100vh;
-      line-height: 1.5;
-    }
-    .my-link {
-      font-size: 18px;
-      text-decoration: none;
-      display: inline-block;
-      /*background-color: #ccc;*/
-      /*width: 80%;*/
-      width: 128px;
-      height: 128px;
-      line-height: 128px;
-      /*border-radius: 10px;*/
-      overflow: hidden;
-    }
-    a {
-      box-shadow: 0 0 10px 0.1em #0cf, 0 0 4px 0.1em #0cf inset, 0 0 1em #0cf inset;
-      color: currentColor;
-      display: inline-block;
-      text-decoration: none;
-      transition: transform 0.1s linear,  box-shadow 0.15s linear,  margin 0.1s linear,  width 0.1s linear,  height 0.1s linear;
-      border-radius: 50%;
-      position: relative;
-    }
-    a:hover {
-      transform: scale(1.1);
-    }
-    a:before {
-      background-color: #fff;
-      border-radius: 50%;
-      content: "";
-      display: block;
-      opacity: 0.5;
-      position: absolute;
-      top: 1.2em;
-      left: 1.3em;
-      width: 1.5em;
-      height: 0.5em;
-      transform: rotate(-45deg);
-    }
-  </style>
+  .container {
+    width: 1200px;
+    margin: auto;
+    padding: 40px;
+  }
+  .row {
+    display: flex;
+  }
+  .block {
+    width: 20%;
+    margin-top: 20px;
+    text-align: center;
+    float: left;
+  }
+  body {
+    background-color: #002;
+    background-image: radial-gradient(circle at center, #045, #002);
+    color: #fff;
+    font: 1em "Open Sans", sans-serif;
+    height: 100vh;
+    line-height: 1.5;
+  }
+  .my-link {
+    font-size: 18px;
+    text-decoration: none;
+    display: inline-block;
+    /*background-color: #ccc;*/
+    /*width: 80%;*/
+    width: 128px;
+    height: 128px;
+    line-height: 128px;
+    /*border-radius: 10px;*/
+    overflow: hidden;
+  }
+  a {
+    box-shadow: 0 0 10px 0.1em #0cf, 0 0 4px 0.1em #0cf inset, 0 0 1em #0cf inset;
+    color: currentColor;
+    display: inline-block;
+    text-decoration: none;
+    transition: transform 0.1s linear,  box-shadow 0.15s linear,  margin 0.1s linear,  width 0.1s linear,  height 0.1s linear;
+    border-radius: 50%;
+    position: relative;
+  }
+  a:hover {
+    transform: scale(1.1);
+  }
+  a:before {
+    background-color: #fff;
+    border-radius: 50%;
+    content: "";
+    display: block;
+    opacity: 0.5;
+    position: absolute;
+    top: 1.2em;
+    left: 1.3em;
+    width: 1.5em;
+    height: 0.5em;
+    transform: rotate(-45deg);
+  }
+</style>
 </head>
 
 <body>
-  <div class="row">
+  <div class="container">
     <h2>工具</h2>
-    <div class="block"><a class="my-link" href="tools/http_code.html" target="_blank">HTTP状态码</a></div>
-    <div class="block"><a class="my-link" href="tools/ascii_code.html" target="_blank">ASCII码</a></div>
-    <div class="block"><a class="my-link" href="tools/qrcode.html" target="_blank">二维码</a></div>
-    <div class="block"><a class="my-link" href="tools/base64.html" target="_blank">base64</a></div>
-    <div class="block"><a class="my-link" href="tools/loan.html" target="_blank">贷款</a></div>
-    <div class="block"><a class="my-link" href="tools/income_tax.html" target="_blank">个人所得税</a></div>
-    <div class="block"><a class="my-link" href="tools/simple_trandition.html" target="_blank">简繁转换</a></div>
-  </div>
-  <div class="row">
+    <div class="row">
+      <div class="block"><a class="my-link" href="tools/http_code.html" target="_blank">HTTP状态码</a></div>
+      <div class="block"><a class="my-link" href="tools/ascii_code.html" target="_blank">ASCII码</a></div>
+      <div class="block"><a class="my-link" href="tools/qrcode.html" target="_blank">二维码</a></div>
+      <div class="block"><a class="my-link" href="tools/base64.html" target="_blank">base64</a></div>
+      <div class="block"><a class="my-link" href="tools/loan.html" target="_blank">贷款</a></div>
+      <div class="block"><a class="my-link" href="tools/income_tax.html" target="_blank">个人所得税</a></div>
+      <div class="block"><a class="my-link" href="tools/simple_trandition.html" target="_blank">简繁转换</a></div>
+    </div>
     <h2>Demo</h2>
-    <div class="block"><a class="my-link" href="demo/leaf/" target="_blank">模板引擎</a></div>
-    <div class="block"><a class="my-link" href="demo/help/" target="_blank">类jQuery</a></div>
-    <div class="block"><a class="my-link" href="demo/code/" target="_blank">code</a></div>
-    <div class="block"><a class="my-link" href="demo/carousel/" target="_blank">carousel</a></div>
-    <div class="block"><a class="my-link" href="demo/cube/" target="_blank">魔方</a></div>
-    <div class="block"><a class="my-link" href="demo/error/" target="_blank">错误展示</a></div>
-    <div class="block"><a class="my-link" href="demo/fnline/" target="_blank">函数线</a></div>
-  </div>
-  <div class="row">
+    <div class="row">
+      <div class="block"><a class="my-link" href="demo/leaf/" target="_blank">模板引擎</a></div>
+      <div class="block"><a class="my-link" href="demo/help/" target="_blank">类jQuery</a></div>
+      <div class="block"><a class="my-link" href="demo/code/" target="_blank">code</a></div>
+      <div class="block"><a class="my-link" href="demo/carousel/" target="_blank">carousel</a></div>
+      <div class="block"><a class="my-link" href="demo/cube/" target="_blank">魔方</a></div>
+      <div class="block"><a class="my-link" href="demo/error/" target="_blank">错误展示</a></div>
+      <div class="block"><a class="my-link" href="demo/fnline/" target="_blank">函数线</a></div>
+    </div>
     <h2>游戏</h2>
-    <div class="block"><a class="my-link" href="games/man_down/" target="_blank">男人下百层</a></div>
-    <div class="block"><a class="my-link" href="games/tank_battle/" target="_blank">坦克大战</a></div>
-    <div class="block"><a class="my-link" href="games/mine_sweeping/" target="_blank">扫雷</a></div>
-    <div class="block"><a class="my-link" href="games/chess/" target="_blank">国际象棋</a></div>
-    <div class="block"><a class="my-link" href="games/chinese_chess/" target="_blank">中国象棋</a></div>
-    <div class="block"><a class="my-link" href="games/gomoku/" target="_blank">五子棋</a></div>
-  </div>
-  <div class="row">
+    <div class="row">
+      <div class="block"><a class="my-link" href="games/man_down/" target="_blank">男人下百层</a></div>
+      <div class="block"><a class="my-link" href="games/tank_battle/" target="_blank">坦克大战</a></div>
+      <div class="block"><a class="my-link" href="games/mine_sweeping/" target="_blank">扫雷</a></div>
+      <div class="block"><a class="my-link" href="games/chess/" target="_blank">国际象棋</a></div>
+      <div class="block"><a class="my-link" href="games/chinese_chess/" target="_blank">中国象棋</a></div>
+      <div class="block"><a class="my-link" href="games/gomoku/" target="_blank">五子棋</a></div>
+    </div>
     <h2>其它</h2>
-    <div class="block"><a class="my-link" href="demo/resume/" target="_blank">简历</a></div>
-    <div class="block"><a class="my-link" href="other/emulator/" target="_blank">模拟器</a></div>
-    <div class="block"><a class="my-link" href="https://raw.githubusercontent.com/listen80/my-chrome-tools/master/app.crx" target="_blank">chrome扩展</a></div>
+    <div class="row">
+      <div class="block"><a class="my-link" href="demo/resume/" target="_blank">简历</a></div>
+      <div class="block"><a class="my-link" href="other/emulator/" target="_blank">模拟器</a></div>
+      <div class="block"><a class="my-link" href="https://raw.githubusercontent.com/listen80/my-chrome-tools/master/app.crx" target="_blank">chrome扩展</a></div>
+    </div>
   </div>
 </body>
 
