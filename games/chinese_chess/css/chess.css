@@ -26,14 +26,19 @@ body {
 }
 
 #chess img.selected {
-    -webkit-transform: scale(1.05);
-    transform: scale(1.05);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
     z-index: 1;
 }
 
 #sideBar {
-    height: 800px;
     width: 147px;
+    position: fixed;
+    display: none;
+    border: 1px rgb(23, 32, 233) solid;
+    right: 3px;
+    top: 3px;
+    bottom: 3px;
 }
 
 #regret,
@@ -46,7 +51,7 @@ body {
     border-radius: 4px;
     text-decoration: none;
     border: 1px solid rgb(13, 25, 187);
-    margin-left: 10px;
+    margin: 6px;
 }
 
 #regret:hover,
@@ -67,7 +72,7 @@ body {
 }
 
 #button {
-    line-height: 40px;
+    text-align: center;
 }
 
 #loading {
@@ -93,7 +98,6 @@ body {
 
 #moves {
     padding-left: 50px;
-    width: 80px;
     background-color: white;
     margin-top: 20px;
 }

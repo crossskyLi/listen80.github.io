@@ -829,6 +829,18 @@ document.ondragstart = function() {
   return false;
 }
 
+var show = false;
+document.oncontextmenu = function() {
+  show = !show;
+  if(show) {
+    document.getElementById('sideBar').style.display = 'block'; 
+  } else {
+    document.getElementById('sideBar').style.display = 'none';
+  }
+  
+  return false;
+}
+
 window.onload = function() {
   document.all.loading.style.display = 'none';
 }
