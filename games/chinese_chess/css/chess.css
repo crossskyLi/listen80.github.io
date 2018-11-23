@@ -67,8 +67,11 @@ body {
 }
 
 #history {
-    height: 760px;
     overflow: auto;
+    position: absolute;
+    top: 44px;
+    bottom: 0;
+    width: 100%;
 }
 
 #button {
