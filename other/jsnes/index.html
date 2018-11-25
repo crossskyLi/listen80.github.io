@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<style>
+		canvas {
+			width: 512px;
+		}
+		ol { 
+		  margin: 0;
+		  height: 200px;
+		  overflow: auto;
+		  border: 1px solid;
+		}
+		li {
+		  border-bottom: 1px solid #eee;
+		  line-height: 1.5;
+		}
+		div {
+		  margin: 10px auto 0;
+			width: 512px;
+		}
+	</style>
+	<div>
+		<canvas id="canvas" width="256" height="240"></canvas>
+		<ol id="roms"></ol>
+	</div>
+	<script type="text/javascript" src="https://unpkg.com/jsnes@1.0.1/dist/jsnes.min.js"></script>
+
+	<script>
+	
+
+
+		/**
+		 * Initializes a new empty `RingBuffer` with the given `capacity`, when no
+		 * value is provided uses the default capacity (50).
+		 *
+		 * If provided, `evictedCb` gets run with any evicted elements.
+		 *
+		 * @param {capacity}
+		 * @param [evictedCb]
+		 * @return {RingBuffer}
+		 * @api public
+		 */
+		function RingBuffer(capacity, evictedCb) {
+		  this._elements = new Array(capacity || 50);
+		  this._first = 0;
+		  this._last = 0;
+		  this._size = 0;
+		  this._evictedCb = evictedCb;
+		}
+
+		/**
+		 * Returns the capacity of the ring buffer.
+		 *
+		 * @return {Number}
+		 * @api public
+		 */
+		RingBuffer.prototype.capacity = function() {
+		  return this._elements.length;
+		};
+
+		/**
+		 * Returns whether the ring buffer is empty or not.
+		 *
+		 * @return {Boolean}
+		 * @api public
+		 */
+		RingBuffer.prototype.isEmpty = function() {
+		  return this.size() === 0;
+		};
+
+		/**
+		 * Returns whether the ring buffer is full or not.
+		 *
+		 * @return {Boolean}
+		 * @api public
+		 */
+		RingBuffer.prototype.isFull = function() {
+		  return this.size() === this.capacity();
+		};
+
+		/**
+		 * Peeks at the top element of the queue.
+		 *
+		 * @return {Object}
+		 * @throws {Error} when the ring buffer is empty.
+		 * @api public
+		 */
+		RingBuffer.prototype.peek = function() {
+		  if (this.isEmpty()) throw new Error('RingBuffer is empty');
+
+		  return this._elements[this._first];
+		};
+
+		/**
+		 * Peeks at multiple elements in the queue.
+		 *
+		 * @return {Array}
+		 * @throws {Error} when there are not enough elements in the buffer.
+		 * @api public
+		 */
+		RingBuffer.prototype.peekN = function(count) {
+		  if (count > this._size) throw new Error('Not enough elements in RingBuffer');
+
+		  var end = Math.min(this._first + count, this.capacity());
+		  var firstHalf = this._elements.slice(this._first, end);
+		  if (end < this.capacity()) {
+		    return firstHalf;
+		  }
+		  var secondHalf = this._elements.slice(0, count - firstHalf.length);
+		  return firstHalf.concat(secondHalf);
+		};
+
+		/**
+		 * Dequeues the top element of the queue.
+		 *
+		 * @return {Object}
+		 * @throws {Error} when the ring buffer is empty.
+		 * @api public
+		 */
+		RingBuffer.prototype.deq = function() {
+		  var element = this.peek();
+
+		  this._size--;
+		  this._first = (this._first + 1) % this.capacity();
+
+		  return element;
+		};
+
+		/**
+		 * Dequeues multiple elements of the queue.
+		 *
+		 * @return {Array}
+		 * @throws {Error} when there are not enough elements in the buffer.
+		 * @api public
+		 */
+		RingBuffer.prototype.deqN = function(count) {
+		  var elements = this.peekN(count);
+
+		  this._size -= count;
+		  this._first = (this._first + count) % this.capacity();
+
+		  return elements;
+		};
+
+		/**
+		 * Enqueues the `element` at the end of the ring buffer and returns its new size.
+		 *
+		 * @param {Object} element
+		 * @return {Number}
+		 * @api public
+		 */
+		RingBuffer.prototype.enq = function(element) {
+		  this._end = (this._first + this.size()) % this.capacity();
+		  var full = this.isFull()
+		  if (full && this._evictedCb) {
+		    this._evictedCb(this._elements[this._end]);
+		  }
+		  this._elements[this._end] = element;
+
+		  if (full) {
+		    this._first = (this._first + 1) % this.capacity();
+		  } else {
+		    this._size++;
+		  }
+
+		  return this.size();
+		};
+
+		/**
+		 * Returns the size of the queue.
+		 *
+		 * @return {Number}
+		 * @api public
+		 */
+		RingBuffer.prototype.size = function() {
+		  return this._size;
+		};
+
+
+		 class Speakers {
+		  constructor() {
+		    // this.onBufferUnderrun = onBufferUnderrun;
+		    this.bufferSize = 8192;
+		    this.buffer = new RingBuffer(this.bufferSize * 2);
+		  }
+
+		  start() {
+		    // Audio is not supported
+		    if (!window.AudioContext) {
+		      return;
+		    }
+		    this.audioCtx = new window.AudioContext();
+		    this.scriptNode = this.audioCtx.createScriptProcessor(1024, 0, 2);
+		    this.scriptNode.onaudioprocess = this.onaudioprocess;
+		    this.scriptNode.connect(this.audioCtx.destination);
+		  }
+
+		  stop() {
+		    if (this.scriptNode) {
+		      this.scriptNode.disconnect(this.audioCtx.destination);
+		      this.scriptNode.onaudioprocess = null;
+		      this.scriptNode = null;
+		    }
+		    if (this.audioCtx) {
+		      this.audioCtx.close().catch(handleError);
+		      this.audioCtx = null;
+		    }
+		  }
+
+		  writeSample (left, right){
+		    if (this.buffer.size() / 2 >= this.bufferSize) {
+		      // console.log(`Buffer overrun`);
+		    }
+		    this.buffer.enq(left);
+		    this.buffer.enq(right);
+		  };
+
+		  onaudioprocess (e) {
+		    var left = e.outputBuffer.getChannelData(0);
+		    var right = e.outputBuffer.getChannelData(1);
+		    var size = left.length;
+
+		    // We're going to buffer underrun. Attempt to fill the buffer.
+		    if (speakers.buffer.size() < size * 2 && speakers.onBufferUnderrun) {
+		      speakers.onBufferUnderrun(speakers.buffer.size(), size * 2);
+		    }
+
+		    try {
+		      var samples = speakers.buffer.deqN(size * 2);
+		    } catch (e) {
+		      // onBufferUnderrun failed to fill the buffer, so handle a real buffer
+		      // underrun
+
+		      // ignore empty buffers... assume audio has just stopped
+		      var bufferSize = speakers.buffer.size() / 2;
+		      if (bufferSize > 0) {
+		        // console.log(`Buffer underrun (needed ${size}, got ${bufferSize})`);
+		      }
+		      for (var j = 0; j < size; j++) {
+		        left[j] = 0;
+		        right[j] = 0;
+		      }
+		      return;
+		    }
+		    for (var i = 0; i < size; i++) {
+		      left[i] = samples[i * 2];
+		      right[i] = samples[i * 2 + 1];
+		    }
+		  };
+		}
+
+		var speakers = new Speakers
+		speakers.start()
+		// WEBPACK FOOTER //
+		// ./src/Speakers.js
+
+		//////////////////
+		// WEBPACK FOOTER
+		// ./node_modules/ringbufferjs/index.js
+		// module id = 124
+		// module chunks = 0
+
+
+		var canvas = document.getElementById('canvas')
+		var canvasContext = canvas.getContext('2d')
+		var width = 256, height = 240, total = width * height;
+		canvasContext.fillRect(0, 0, width ,height)
+		var imageData = canvasContext.getImageData(0, 0, 256, 240)
+		var nes = new jsnes.NES({
+		  onFrame: function(frameBuffer) {
+		  	// console.log(frameBuffer)
+		    // ... write frameBuffer to screen
+        var pixel, i, j;
+        var data = imageData.data;
+
+        for (var i = 0; i < total; i++) {
+          pixel = frameBuffer[i];
+
+          j = i * 4;
+          data[j] = pixel & 0xFF;
+          data[j + 1] = (pixel >> 8) & 0xFF;
+          data[j + 2] = (pixel >> 16) & 0xFF;
+          // data[j + 3] = 255
+        }
+
+        canvasContext.putImageData(imageData, 0, 0);
+        
+		  },
+		  onAudioSample: function function_name(...aaa) {
+		  	speakers.writeSample(...aaa)
+		  }
+		});
+
+		function ajax(url, binary) {
+			
+			return new Promise(function (resolve, reject) {
+		    var xhr = new XMLHttpRequest
+				if (binary) {
+		     // Download as binary
+		      xhr.overrideMimeType('text/plain; charset=x-user-defined');
+		    }
+		    
+		    xhr.onreadystatechange = function(e){
+		    	if (xhr.readyState==4 && xhr.status==200) {
+		    		resolve(xhr.responseText)
+		    	}
+		    }
+		    xhr.open('GET', url, true)
+		    xhr.send();
+			})
+			
+		}
+		
+		var id
+		
+		ajax('roms.json').then((data) => {
+			console.log(JSON.parse(data).roms.forEach(function (v) {
+				var roms = document.getElementById('roms')
+				var li = document.createElement('li')
+				li.innerHTML = v.replace('.nes', '');
+				li.onclick = function () {
+					ajax('roms/' + v, true).then((rom) => {
+						nes.loadROM(rom)
+						cancelAnimationFrame(id)
+						frame()
+					})
+				}
+				roms.appendChild(li)
+			}))     
+		})
+		
+
+		function frame () {
+			nes.frame()
+			id = requestAnimationFrame(frame)
+		}
+
+		var keys = {
+			 'w': jsnes.Controller.BUTTON_UP,
+			 's': jsnes.Controller.BUTTON_DOWN,
+			 'a': jsnes.Controller.BUTTON_LEFT,
+			 'd': jsnes.Controller.BUTTON_RIGHT,
+			 'j': jsnes.Controller.BUTTON_B,
+			 'k': jsnes.Controller.BUTTON_A,
+			 'Enter': jsnes.Controller.BUTTON_START,
+			 'Shift': jsnes.Controller.BUTTON_SELECT,
+		}
+		document.addEventListener('keydown', function (e) {
+			nes.buttonDown(1, keys[e.key]);
+		})
+
+		document.addEventListener('keyup', function (e) {
+			nes.buttonUp(1, keys[e.key]);
+		})
+
+
+
+	</script>
+</body>
+</html>
