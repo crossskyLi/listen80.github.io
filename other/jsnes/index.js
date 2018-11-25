@@ -199,11 +199,14 @@ var canvas = document.getElementById('canvas')
 var canvasContext = canvas.getContext('2d')
 var width = 256, height = 240, total = width * height;
 canvasContext.fillRect(0, 0, width ,height)
-canvasContext.fillStyle = 'white'
+
 var imageData = canvasContext.getImageData(0, 0, 256, 240)
 function loading(argument) {
+	canvasContext.fillStyle = 'black'
+	canvasContext.fillRect(0, 0, width ,height)
 	canvasContext.font="30px";
 	canvasContext.textAlign='center'
+	canvasContext.fillStyle = 'white'
 	canvasContext.fillText("正在载入",128,100);
 }
 
@@ -255,8 +258,9 @@ ajax('roms.json').then((data) => {
 		li.innerHTML = v.replace('.nes', '');
 		li.onclick = function () {
 			loading()
+			cancelAnimationFrame(id)
 			ajax('roms/' + v, true).then((rom) => {
-				cancelAnimationFrame(id)
+				
 				nes.loadROM(rom)
 				frame()
 			})
