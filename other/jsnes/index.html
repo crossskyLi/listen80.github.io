@@ -63,22 +63,6 @@
 		  return this._elements.length;
 		};
 
-		/**
-		 * Returns whether the ring buffer is empty or not.
-		 *
-		 * @return {Boolean}
-		 * @api public
-		 */
-		RingBuffer.prototype.isEmpty = function() {
-		  return this.size() === 0;
-		};
-
-		/**
-		 * Returns whether the ring buffer is full or not.
-		 *
-		 * @return {Boolean}
-		 * @api public
-		 */
 		RingBuffer.prototype.isFull = function() {
 		  return this.size() === this.capacity();
 		};
@@ -91,7 +75,7 @@
 		 * @api public
 		 */
 		RingBuffer.prototype.peek = function() {
-		  if (this.isEmpty()) throw new Error('RingBuffer is empty');
+		  if (this.size() === 0) throw new Error('RingBuffer is empty');
 
 		  return this._elements[this._first];
 		};
@@ -187,6 +171,7 @@
 		    // this.onBufferUnderrun = onBufferUnderrun;
 		    this.bufferSize = 8192;
 		    this.buffer = new RingBuffer(this.bufferSize * 2);
+		    this.start()
 		  }
 
 		  start() {
@@ -196,7 +181,7 @@
 		    }
 		    this.audioCtx = new window.AudioContext();
 		    this.scriptNode = this.audioCtx.createScriptProcessor(1024, 0, 2);
-		    this.scriptNode.onaudioprocess = this.onaudioprocess;
+		    this.scriptNode.onaudioprocess = this.onaudioprocess.bind(this);
 		    this.scriptNode.connect(this.audioCtx.destination);
 		  }
 
@@ -207,7 +192,9 @@
 		      this.scriptNode = null;
 		    }
 		    if (this.audioCtx) {
-		      this.audioCtx.close().catch(handleError);
+		      this.audioCtx.close().catch((e) => {
+		      	// 
+		      });
 		      this.audioCtx = null;
 		    }
 		  }
@@ -226,18 +213,18 @@
 		    var size = left.length;
 
 		    // We're going to buffer underrun. Attempt to fill the buffer.
-		    if (speakers.buffer.size() < size * 2 && speakers.onBufferUnderrun) {
-		      speakers.onBufferUnderrun(speakers.buffer.size(), size * 2);
+		    if (this.buffer.size() < size * 2 && this.onBufferUnderrun) {
+		      this.onBufferUnderrun(this.buffer.size(), size * 2);
 		    }
 
 		    try {
-		      var samples = speakers.buffer.deqN(size * 2);
+		      var samples = this.buffer.deqN(size * 2);
 		    } catch (e) {
 		      // onBufferUnderrun failed to fill the buffer, so handle a real buffer
 		      // underrun
 
 		      // ignore empty buffers... assume audio has just stopped
-		      var bufferSize = speakers.buffer.size() / 2;
+		      var bufferSize = this.buffer.size() / 2;
 		      if (bufferSize > 0) {
 		        // console.log(`Buffer underrun (needed ${size}, got ${bufferSize})`);
 		      }
@@ -255,17 +242,6 @@
 		}
 
 		var speakers = new Speakers
-		speakers.start()
-		// WEBPACK FOOTER //
-		// ./src/Speakers.js
-
-		//////////////////
-		// WEBPACK FOOTER
-		// ./node_modules/ringbufferjs/index.js
-		// module id = 124
-		// module chunks = 0
-
-
 		var canvas = document.getElementById('canvas')
 		var canvasContext = canvas.getContext('2d')
 		var width = 256, height = 240, total = width * height;
@@ -273,26 +249,20 @@
 		var imageData = canvasContext.getImageData(0, 0, 256, 240)
 		var nes = new jsnes.NES({
 		  onFrame: function(frameBuffer) {
-		  	// console.log(frameBuffer)
-		    // ... write frameBuffer to screen
         var pixel, i, j;
         var data = imageData.data;
-
         for (var i = 0; i < total; i++) {
           pixel = frameBuffer[i];
-
           j = i * 4;
           data[j] = pixel & 0xFF;
           data[j + 1] = (pixel >> 8) & 0xFF;
           data[j + 2] = (pixel >> 16) & 0xFF;
-          // data[j + 3] = 255
         }
-
         canvasContext.putImageData(imageData, 0, 0);
         
 		  },
-		  onAudioSample: function function_name(...aaa) {
-		  	speakers.writeSample(...aaa)
+		  onAudioSample: function (left, right) {
+		  	speakers.writeSample(left, right)
 		  }
 		});
 
@@ -319,7 +289,7 @@
 		var id
 		
 		ajax('roms.json').then((data) => {
-			console.log(JSON.parse(data).roms.forEach(function (v) {
+			JSON.parse(data).roms.forEach(function (v, i) {
 				var roms = document.getElementById('roms')
 				var li = document.createElement('li')
 				li.innerHTML = v.replace('.nes', '');
@@ -330,8 +300,9 @@
 						frame()
 					})
 				}
+				!i && li.onclick()
 				roms.appendChild(li)
-			}))     
+			})   
 		})
 		
 
@@ -357,8 +328,6 @@
 		document.addEventListener('keyup', function (e) {
 			nes.buttonUp(1, keys[e.key]);
 		})
-
-
 
 	</script>
 </body>
