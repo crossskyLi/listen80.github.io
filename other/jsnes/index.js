@@ -283,12 +283,25 @@ var keys = {
 	'Shift': jsnes.Controller.BUTTON_SELECT,
 }
 
+var keys2 = {
+	'ArrowUp': jsnes.Controller.BUTTON_UP,
+	'ArrowDown': jsnes.Controller.BUTTON_DOWN,
+	'ArrowLeft': jsnes.Controller.BUTTON_LEFT,
+	'ArrowRight': jsnes.Controller.BUTTON_RIGHT,
+	'1': jsnes.Controller.BUTTON_B,
+	'2': jsnes.Controller.BUTTON_A,
+	// 'Enter': jsnes.Controller.BUTTON_START,
+	// 'Shift': jsnes.Controller.BUTTON_SELECT,
+}
+
 document.addEventListener('keydown', function (e) {
 	nes.buttonDown(1, keys[e.key]);
+	nes.buttonDown(2, keys2[e.key]);
 })
 
 document.addEventListener('keyup', function (e) {
 	nes.buttonUp(1, keys[e.key]);
+	nes.buttonUp(2, keys2[e.key]);
 })
 
 document.addEventListener('drop', function (e) {
@@ -308,3 +321,4 @@ document.addEventListener('drop', function (e) {
 document.addEventListener('dragover', function (e) {
 	e.preventDefault()
 })
+
