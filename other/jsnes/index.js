@@ -6,12 +6,6 @@ function RingBuffer(capacity, evictedCb) {
 	this._evictedCb = evictedCb;
 }
 
-/**
-* Returns the capacity of the ring buffer.
-*
-* @return {Number}
-* @api public
-*/
 RingBuffer.prototype.capacity = function() {
 	return this._elements.length;
 };
@@ -20,26 +14,13 @@ RingBuffer.prototype.isFull = function() {
 	return this.size() === this.capacity();
 };
 
-/**
-* Peeks at the top element of the queue.
-*
-* @return {Object}
-* @throws {Error} when the ring buffer is empty.
-* @api public
-*/
+
 RingBuffer.prototype.peek = function() {
 	if (this.size() === 0) throw new Error('RingBuffer is empty');
 
 	return this._elements[this._first];
 };
 
-/**
-* Peeks at multiple elements in the queue.
-*
-* @return {Array}
-* @throws {Error} when there are not enough elements in the buffer.
-* @api public
-*/
 RingBuffer.prototype.peekN = function(count) {
 	if (count > this._size) throw new Error('Not enough elements in RingBuffer');
 
@@ -52,13 +33,6 @@ RingBuffer.prototype.peekN = function(count) {
 	return firstHalf.concat(secondHalf);
 };
 
-/**
-* Dequeues the top element of the queue.
-*
-* @return {Object}
-* @throws {Error} when the ring buffer is empty.
-* @api public
-*/
 RingBuffer.prototype.deq = function() {
 	var element = this.peek();
 
@@ -68,13 +42,6 @@ RingBuffer.prototype.deq = function() {
 	return element;
 };
 
-/**
-* Dequeues multiple elements of the queue.
-*
-* @return {Array}
-* @throws {Error} when there are not enough elements in the buffer.
-* @api public
-*/
 RingBuffer.prototype.deqN = function(count) {
 	var elements = this.peekN(count);
 
@@ -84,13 +51,6 @@ RingBuffer.prototype.deqN = function(count) {
 	return elements;
 };
 
-/**
-* Enqueues the `element` at the end of the ring buffer and returns its new size.
-*
-* @param {Object} element
-* @return {Number}
-* @api public
-*/
 RingBuffer.prototype.enq = function(element) {
 	this._end = (this._first + this.size()) % this.capacity();
 	var full = this.isFull()
@@ -108,12 +68,6 @@ RingBuffer.prototype.enq = function(element) {
 	return this.size();
 };
 
-/**
-* Returns the size of the queue.
-*
-* @return {Number}
-* @api public
-*/
 RingBuffer.prototype.size = function() {
 	return this._size;
 };
@@ -121,21 +75,20 @@ RingBuffer.prototype.size = function() {
 
 class Speakers {
 	constructor() {
-// this.onBufferUnderrun = onBufferUnderrun;
-this.bufferSize = 8192;
-this.buffer = new RingBuffer(this.bufferSize * 2);
-this.start()
-}
+		this.bufferSize = 8192;
+		this.buffer = new RingBuffer(this.bufferSize * 2);
+		this.start()
+	}
 
-start() {
-// Audio is not supported
-if (!window.AudioContext) {
-	return;
-}
-this.audioCtx = new window.AudioContext();
-this.scriptNode = this.audioCtx.createScriptProcessor(1024, 0, 2);
-this.scriptNode.onaudioprocess = this.onaudioprocess.bind(this);
-this.scriptNode.connect(this.audioCtx.destination);
+	start() {
+	// Audio is not supported
+	if (!window.AudioContext) {
+		return;
+	}
+	this.audioCtx = new window.AudioContext();
+	this.scriptNode = this.audioCtx.createScriptProcessor(1024, 0, 2);
+	this.scriptNode.onaudioprocess = this.onaudioprocess.bind(this);
+	this.scriptNode.connect(this.audioCtx.destination);
 }
 
 stop() {
@@ -146,52 +99,47 @@ stop() {
 	}
 	if (this.audioCtx) {
 		this.audioCtx.close().catch((e) => {
-// 
-});
+		});
 		this.audioCtx = null;
 	}
 }
 
 writeSample (left, right){
 	if (this.buffer.size() / 2 >= this.bufferSize) {
-// console.log(`Buffer overrun`);
-}
-this.buffer.enq(left);
-this.buffer.enq(right);
-};
+	// console.log(`Buffer overrun`);
+	}
+	this.buffer.enq(left);
+	this.buffer.enq(right);
+	};
 
-onaudioprocess (e) {
-	var left = e.outputBuffer.getChannelData(0);
-	var right = e.outputBuffer.getChannelData(1);
-	var size = left.length;
+	onaudioprocess (e) {
+		var left = e.outputBuffer.getChannelData(0);
+		var right = e.outputBuffer.getChannelData(1);
+		var size = left.length;
 
-// We're going to buffer underrun. Attempt to fill the buffer.
-if (this.buffer.size() < size * 2 && this.onBufferUnderrun) {
-	this.onBufferUnderrun(this.buffer.size(), size * 2);
-}
+	// We're going to buffer underrun. Attempt to fill the buffer.
+	if (this.buffer.size() < size * 2 && this.onBufferUnderrun) {
+		this.onBufferUnderrun(this.buffer.size(), size * 2);
+	}
 
-try {
-	var samples = this.buffer.deqN(size * 2);
-} catch (e) {
-// onBufferUnderrun failed to fill the buffer, so handle a real buffer
-// underrun
-
-// ignore empty buffers... assume audio has just stopped
-var bufferSize = this.buffer.size() / 2;
-if (bufferSize > 0) {
-// console.log(`Buffer underrun (needed ${size}, got ${bufferSize})`);
-}
-for (var j = 0; j < size; j++) {
-	left[j] = 0;
-	right[j] = 0;
-}
-return;
-}
-for (var i = 0; i < size; i++) {
-	left[i] = samples[i * 2];
-	right[i] = samples[i * 2 + 1];
-}
-};
+	try {
+		var samples = this.buffer.deqN(size * 2);
+	} catch (e) {
+		var bufferSize = this.buffer.size() / 2;
+		if (bufferSize > 0) {
+		// console.log(`Buffer underrun (needed ${size}, got ${bufferSize})`);
+		}
+		for (var j = 0; j < size; j++) {
+				left[j] = 0;
+				right[j] = 0;
+			}
+			return;
+		}
+		for (var i = 0; i < size; i++) {
+			left[i] = samples[i * 2];
+			right[i] = samples[i * 2 + 1];
+		}
+	};
 }
 
 var speakers = new Speakers
@@ -222,7 +170,6 @@ var nes = new jsnes.NES({
 			data[j + 2] = (pixel >> 16) & 0xFF;
 		}
 		canvasContext.putImageData(imageData, 0, 0);
-
 	},
 	onAudioSample: function (left, right) {
 		speakers.writeSample(left, right)
@@ -234,19 +181,17 @@ function ajax(url, binary) {
 	return new Promise(function (resolve, reject) {
 		var xhr = new XMLHttpRequest
 		if (binary) {
-// Download as binary
-xhr.overrideMimeType('text/plain; charset=x-user-defined');
-}
+			xhr.overrideMimeType('text/plain; charset=x-user-defined');
+		}
 
-xhr.onreadystatechange = function(e){
-	if (xhr.readyState==4 && xhr.status==200) {
-		resolve(xhr.responseText)
+	xhr.onreadystatechange = function(e){
+		if (xhr.readyState==4 && xhr.status==200) {
+			resolve(xhr.responseText)
+		}
 	}
-}
-xhr.open('GET', url, true)
-xhr.send();
-})
-
+	xhr.open('GET', url, true)
+	xhr.send();
+	})
 }
 
 var id
@@ -310,16 +255,15 @@ document.addEventListener('keyup', function (e) {
 
 document.addEventListener('drop', function (e) {
 	e.preventDefault()
-  var file = e.dataTransfer.files[0]
 
-  cancelAnimationFrame(id)
+	cancelAnimationFrame(id)
 
-  var reader = new FileReader();
-   reader.readAsBinaryString(file)
-   reader.onload = function(){
-     nes.loadROM(this.result)
-     frame()
-   }
+	var reader = new FileReader();
+	reader.readAsBinaryString(e.dataTransfer.files[0])
+	reader.onload = function(){
+		nes.loadROM(this.result)
+		frame()
+	}
 })
 
 document.addEventListener('dragover', function (e) {
