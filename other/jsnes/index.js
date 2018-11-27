@@ -155,7 +155,8 @@ function loading(argument) {
 	canvasContext.font="30px";
 	canvasContext.textAlign='center'
 	canvasContext.fillStyle = 'white'
-	canvasContext.fillText("正在载入",128,100);
+	canvasContext.fillText("正在载入",128,100)
+	cancelAnimationFrame(id)
 }
 
 var nes = new jsnes.NES({
@@ -203,7 +204,7 @@ ajax('roms.json').then((data) => {
 		li.innerHTML = v.replace('.nes', '');
 		li.onclick = function () {
 			loading()
-			cancelAnimationFrame(id)
+			
 			ajax('roms/' + v, true).then((rom) => {
 				
 				nes.loadROM(rom)
@@ -256,7 +257,7 @@ document.addEventListener('keyup', function (e) {
 document.addEventListener('drop', function (e) {
 	e.preventDefault()
 
-	cancelAnimationFrame(id)
+	loading()
 
 	var reader = new FileReader();
 	reader.readAsBinaryString(e.dataTransfer.files[0])
