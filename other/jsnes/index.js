@@ -204,7 +204,7 @@ ajax('roms.json').then((data) => {
     var roms = document.getElementById('roms')
     var li = document.createElement('li')
     li.innerHTML = v.replace('.nes', '');
-    li.onclick = function() {
+    li.onclick = function () {
       loading()
 
       ajax('roms/' + v, true).then((rom) => {
@@ -212,7 +212,8 @@ ajax('roms.json').then((data) => {
         nes.loadROM(rom)
         frame()
       })
-    }!i && li.onclick()
+    }
+    !i && li.onclick()
     roms.appendChild(li)
   })
 })
