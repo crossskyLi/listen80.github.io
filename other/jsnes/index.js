@@ -36,10 +36,12 @@ var nes = new jsnes.NES({
   }
 });
 
+var xhr 
 function ajax(url, binary) {
 
+  xhr && xhr.abort()
   return new Promise(function(resolve, reject) {
-    var xhr = new XMLHttpRequest
+    xhr = new XMLHttpRequest
     if (binary) {
       xhr.overrideMimeType('text/plain; charset=x-user-defined');
     }
