@@ -59,8 +59,8 @@ function ajax(url, binary) {
 var id
 
 ajax('roms.json').then((data) => {
+  var roms = document.getElementById('roms')
   JSON.parse(data).roms.forEach(function(v, i) {
-    var roms = document.getElementById('roms')
     var li = document.createElement('li')
     li.innerHTML = v.replace('.nes', '');
     li.onclick = function () {
@@ -75,6 +75,7 @@ ajax('roms.json').then((data) => {
     !i && li.onclick()
     roms.appendChild(li)
   })
+  roms.style.display = 'block'
 })
 
 
