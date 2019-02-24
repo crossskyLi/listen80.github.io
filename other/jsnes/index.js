@@ -60,12 +60,17 @@ var id
 
 ajax('roms.json').then((data) => {
   var roms = document.getElementById('roms')
+  var li = null
   JSON.parse(data).roms.forEach(function(v, i) {
     var li = document.createElement('li')
     li.innerHTML = v.replace('.nes', '');
     li.onclick = function () {
       loading()
-
+      if(li) {
+        li.classList.remove('active')
+      }
+      li = this
+      li.classList.add('active')
       ajax('roms/' + v, true).then((rom) => {
 
         nes.loadROM(rom)
