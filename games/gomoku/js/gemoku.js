@@ -1,25 +1,27 @@
+var lines = 15;
+var rect = 50;
+var width = (lines + 1) * rect;
+var height = (lines + 1) * rect;
+
 var canvas = document.createElement('canvas');
 document.body.appendChild(canvas);
-var w = window.innerWidth,
-    h = window.innerHeight,
-    ctx = canvas.getContext('2d');
-canvas.width = 800, canvas.height = 800;
-var lines = 15;
-ctx.lineWidth = 2
+var ctx = canvas.getContext('2d');
+ctx.lineWidth = 2;
+canvas.width = width, canvas.height = height;
 
-function draw() {
+function draw(ctx) {
     ctx.fillStyle = "#dec7a5";
-    ctx.fillRect(0, 0, 800, 800);
+    ctx.fillRect(0, 0, width, height);
     ctx.save();
-    ctx.translate(50, 50);
+    ctx.translate(rect, rect);
     for (var i = 0; i < lines; i++) {
         ctx.beginPath();
-        ctx.moveTo(0, 50 * i);
-        ctx.lineTo(50 * (lines - 1), 50 * i);
+        ctx.moveTo(0, rect * i);
+        ctx.lineTo(rect * (lines - 1), rect * i);
         ctx.stroke();
 
-        ctx.moveTo(50 * i, 0);
-        ctx.lineTo(50 * i, 50 * (lines - 1));
+        ctx.moveTo(rect * i, 0);
+        ctx.lineTo(rect * i, rect * (lines - 1));
         ctx.stroke();
         ctx.closePath();
     }
@@ -29,21 +31,21 @@ function draw() {
             ctx.beginPath();
             x = z % lines;
             y = z / lines | 0;
-            var grd = ctx.createRadialGradient(x * 50 - 3, y * 50 - 3, 0, x * 50 - 3, y * 50 - 3, 20);
+            var grd = ctx.createRadialGradient(x * rect - 3, y * rect - 3, 0, x * rect - 3, y * rect - 3, 20);
             var isMy = chess[z] === 1;
             grd.addColorStop(0, isMy ? '#666' : '#ddd');
             grd.addColorStop(1, isMy ? '#111' : '#fff');
             ctx.fillStyle = grd;
-            ctx.arc(x * 50, y * 50, 20, 0, Math.PI * 2);
+            ctx.arc(x * rect, y * rect, 20, 0, Math.PI * 2);
             ctx.fill();
         }
     }
-    if(last) {
+    if (last) {
         ctx.beginPath();
         ctx.strokeStyle = "#1091ff";
         ctx.lineWidth = 3;
         x = last[0], y = last[1]
-        ctx.arc(x * 50, y * 50, 20, 0, Math.PI * 2);
+        ctx.arc(x * rect, y * rect, 20, 0, Math.PI * 2);
         ctx.stroke();
     }
     ctx.restore();
@@ -52,17 +54,17 @@ function draw() {
 var chess = {};
 var over = false;
 var last = null;
-canvas.addEventListener('click', function(e) {
+canvas.addEventListener('click', function (e) {
     if (over) {
         return;
     }
-    var x = (e.offsetX - 25) / 50 | 0;
-    var y = (e.offsetY - 25) / 50 | 0;
+    var x = (e.offsetX - rect / 2) / rect | 0;
+    var y = (e.offsetY - rect / 2) / rect | 0;
 
     if (x >= 0 && x < lines && y >= 0 && y < lines && !chess[y * lines + x]) {
         chess[y * lines + x] = 1;
         last = [x, y];
-        draw();
+        draw(ctx);
         for (var k = 0; k < count; k++) {
             if (wins[y][x][k]) {
                 myWin[k]++;
@@ -212,13 +214,13 @@ function AI() {
     }
     chess[u * lines + v] = -1;
     last = [v, u]
-    draw();
+    draw(ctx);
     for (var k = 0; k < count; k++) {
         if (wins[u][v][k]) {
             computerWin[k]++;
             myWin[k] = 6; //这个位置对方不可能赢了
             if (computerWin[k] == 5) {
-                requestAnimationFrame(function() {
+                requestAnimationFrame(function () {
                     alert('计算机赢了');
                 })
                 over = true;
@@ -227,4 +229,4 @@ function AI() {
         }
     }
 }
-draw();
+draw(ctx);
