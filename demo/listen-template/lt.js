@@ -1,4 +1,4 @@
-~ function() {
+~ function () {
     var cache = {};
 
     function leaf(tpl, id) {
@@ -15,7 +15,7 @@
 
     function build(tpl) {
         var func = compile(tpl);
-        return function(data) {
+        return function (data) {
             return func.call(leaf, data);
         }
     };
@@ -30,7 +30,7 @@
     }
 
     function escape(value) {
-        return toString(value).replace(/&(?![\w#]+;)|[<>"']/g, function(s) {
+        return toString(value).replace(/&(?![\w#]+;)|[<>"']/g, function (s) {
             var map = {
                 "<": "&#60;",
                 ">": "&#62;",
@@ -67,7 +67,7 @@
     }
 
     function for_html(code) {
-        if(code) {
+        if (code) {
             return echo("'" + code.replace(/('|\\)/g, '\\$1').replace(/\r/g, '\\r').replace(/\n/g, '\\n') + "'");
         } else {
             return code;

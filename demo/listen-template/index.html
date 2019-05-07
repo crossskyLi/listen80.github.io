@@ -5,14 +5,14 @@
   <meta charset="UTF-8">
   <title>js-template-speed-test</title>
   <style>
-  body {
-    text-align: center;
-    font-family: '宋体';
-  }
+    body {
+      text-align: center;
+      font-family: '宋体';
+    }
   </style>
   <script src="lib/highcharts.js"></script>
-  <script src="leaf.js"></script>
-  <script id="leaf" type="text/tpl">
+  <script src="lt.js"></script>
+  <script id="lt" type="text/tpl">
     <ul>
       {for $d.list}
       <li>用户: {$v.user}/ 网站：{$v.site}</li>{/for}
@@ -121,7 +121,7 @@
 </head>
 
 <body>
-  <h1>模板引擎leafjs速度测试</h1>
+  <h1>模板引擎ltjs速度测试</h1>
   <div id="container"></div>
 </body>
 
