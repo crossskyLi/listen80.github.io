@@ -12,12 +12,12 @@
     }
 
     a.copy {
-      display: inline-block;
       margin: 22px;
       border: 1px solid #6387ff;
       padding: 10px 14px;
       border-radius: 5px;
       color: #6387ff;
+      display: none;
     }
 
     a,
@@ -35,9 +35,10 @@
       padding: 10px;
       border-radius: 25px;
     }
+
     span.img img {
       max-width: 100%;
-      min-height: 100%;
+      max-height: 800px;
     }
   </style>
 </head>
@@ -82,9 +83,9 @@
     }
 
     $('.img').onclick = function () {
-      var input = document.createElement('input');
-      input.type = "file";
-      input.accept = "image/gif, image/jpeg, image/png";
+      var input = document.createElement('input')
+      input.type = "file"
+      input.accept = "image/gif, image/jpeg, image/png"
       input.onchange = function (e) {
         var file = this.files[0]
         loadFile(file)
@@ -97,26 +98,35 @@
     function loadFile(file, fn) {
       if (file) {
         if (file.type.indexOf('image/') === 0) {
-          var reader = new FileReader();
+          var reader = new FileReader()
           reader.onload = function (e) {
             str = e.target.result
             $('.img').innerHTML = `<img src="${str}">`
             fn && fn(e.target.result)
           }
-          reader.readAsDataURL(file);
+          reader.readAsDataURL(file)
+          $('.copy').innerText = 'base64生成成功'
+          $('.copy').style.display = 'inline-block'
         } else {
-          console.log('not a image')
+          str = ''
+          $('.copy').style.display = 'none'
+          $('.copy').html('非图片文件')
         }
       }
     }
 
     document.addEventListener('copy', function (e) {
-      e.clipboardData.setData('text/plain', str);
-      e.preventDefault();
+      e.clipboardData.setData('text/plain', str)
+      e.preventDefault()
+      if (str) {
+        $('.copy').html('复制成功')
+      } else {
+        $('.copy').html('复制失败')
+      }
     });
 
     $('.copy').onclick = function () {
-      document.execCommand("copy");
+      document.execCommand("copy")
     }
   </script>
 </body>
