@@ -1,4 +1,4 @@
-~ function() {
+~ function () {
     var cache = {};
 
     function lt(tpl, id) {
@@ -15,7 +15,7 @@
 
     function build(tpl) {
         var func = compile(tpl);
-        return function(data) {
+        return function (data) {
             return func.call(lt, data);
         }
     };
@@ -30,7 +30,7 @@
     }
 
     function escape(value) {
-        return toString(value).replace(/&(?![\w#]+;)|[<>"']/g, function(s) {
+        return toString(value).replace(/&(?![\w#]+;)|[<>"']/g, function (s) {
             var map = {
                 "<": "&#60;",
                 ">": "&#62;",
@@ -67,7 +67,7 @@
     }
 
     function for_html(code) {
-        if(code) {
+        if (code) {
             return echo("'" + code.replace(/('|\\)/g, '\\$1').replace(/\r/g, '\\r').replace(/\n/g, '\\n') + "'");
         } else {
             return code;
@@ -127,12 +127,12 @@
     }
 
     function compile(source) {
-        var code = "var $t=this,$e=$t.$e,$f=$t.$f,$s=$t.$s,$o='';with($data){";
+        var code = "'use strict';var $t=this,$e=$t.$e,$f=$t.$f,$s=$t.$s,$o='';";
         var codes = source.split(/\{|\}/);
         for (var i = 0, len = codes.length; i < len; i++) {
             i % 2 === 0 ? code += for_html(codes[i]) : code += for_js(codes[i]);
         }
-        code += "};return $o;";
+        code += "return $o;";
         return new Function("$data", code);;
     }
 

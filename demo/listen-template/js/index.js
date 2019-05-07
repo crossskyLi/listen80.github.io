@@ -25,101 +25,101 @@ var testList = [{
         }
     }
 }, {
-    name: 'easyTemplate',
-    tester: function() {
-        var source = document.getElementById('easyTemplate').innerHTML;
-        var fn = easyTemplate(source);
-        for (var i = 0; i < number; i++) {
-            // easyTemplate 渲染方法被重写到 toString(), 需要取值操作才会运行
-            fn(data) + '';
-        }
-    }
-}, {
-    name: 'juicer',
-    tester: function() {
-        var config = {
-            cache: true
-        }
-        var source = document.getElementById('juicer').innerHTML;
-        for (var i = 0; i < number; i++) {
-            juicer.to_html(source, data, config);
-        }
-    }
-}, {
-    name: 'etpl',
-    tester: function() {
-        // dont escape html
-        etpl.config({
-            defaultFilter: ''
-        });
-        var source = document.getElementById('etpl').innerHTML;
-        var fn = etpl.compile(source);
-        for (var i = 0; i < number; i++) {
-            fn(data);
-        }
-    }
-}, {
-    name: 'Mustache',
-    tester: function() {
-        var source = document.getElementById('Mustache').innerHTML;
-        for (var i = 0; i < number; i++) {
-            Mustache.to_html(source, data);
-        }
-    }
-}, {
-    name: 'Handlebars',
-    tester: function() {
-        var source = document.getElementById('Handlebars').innerHTML;
-        var fn = Handlebars.compile(source);
-        for (var i = 0; i < number; i++) {
-            fn(data);
-        }
-    }
-}, {
-    name: 'baiduTemplate',
-    tester: function() {
-        var bt = baidu.template;
-        bt.ESCAPE = false;
-        for (var i = 0; i < number; i++) {
-            bt('baidu-template', data);
-        }
-    }
-}, {
-    name: 'tmpl',
-    tester: function() {
-        var source = document.getElementById('tmpl').innerHTML;
-        var fn = tmpl(source);
-        for (var i = 0; i < number; i++) {
-            fn(data);
-        }
-    }
-}, {
-    name: 'doT',
-    tester: function() {
-        var source = document.getElementById('doT').innerHTML;
-        var doTtmpl = doT.template(source);
-        for (var i = 0; i < number; i++) {
-            doTtmpl(data);
-        }
-    }
-}, {
-    name: 'ejs',
-    tester: function() {
-        var source = document.getElementById('ejs').innerHTML;
-        for (var i = 0; i < number; i++) {
-            ejs.render(source, data);
-        }
-    }
-}, {
-    name: 'underscore',
-    tester: function() {
-        var source = document.getElementById('underscoreTemplate').innerHTML;
-        var fn = _.template(source);
-        for (var i = 0; i < number; i++) {
-            fn(data);
-        }
-    }
-}, {
+//     name: 'easyTemplate',
+//     tester: function() {
+//         var source = document.getElementById('easyTemplate').innerHTML;
+//         var fn = easyTemplate(source);
+//         for (var i = 0; i < number; i++) {
+//             // easyTemplate 渲染方法被重写到 toString(), 需要取值操作才会运行
+//             fn(data) + '';
+//         }
+//     }
+// }, {
+//     name: 'juicer',
+//     tester: function() {
+//         var config = {
+//             cache: true
+//         }
+//         var source = document.getElementById('juicer').innerHTML;
+//         for (var i = 0; i < number; i++) {
+//             juicer.to_html(source, data, config);
+//         }
+//     }
+// }, {
+//     name: 'etpl',
+//     tester: function() {
+//         // dont escape html
+//         etpl.config({
+//             defaultFilter: ''
+//         });
+//         var source = document.getElementById('etpl').innerHTML;
+//         var fn = etpl.compile(source);
+//         for (var i = 0; i < number; i++) {
+//             fn(data);
+//         }
+//     }
+// }, {
+//     name: 'Mustache',
+//     tester: function() {
+//         var source = document.getElementById('Mustache').innerHTML;
+//         for (var i = 0; i < number; i++) {
+//             Mustache.to_html(source, data);
+//         }
+//     }
+// }, {
+//     name: 'Handlebars',
+//     tester: function() {
+//         var source = document.getElementById('Handlebars').innerHTML;
+//         var fn = Handlebars.compile(source);
+//         for (var i = 0; i < number; i++) {
+//             fn(data);
+//         }
+//     }
+// }, {
+//     name: 'baiduTemplate',
+//     tester: function() {
+//         var bt = baidu.template;
+//         bt.ESCAPE = false;
+//         for (var i = 0; i < number; i++) {
+//             bt('baidu-template', data);
+//         }
+//     }
+// }, {
+//     name: 'tmpl',
+//     tester: function() {
+//         var source = document.getElementById('tmpl').innerHTML;
+//         var fn = tmpl(source);
+//         for (var i = 0; i < number; i++) {
+//             fn(data);
+//         }
+//     }
+// }, {
+//     name: 'doT',
+//     tester: function() {
+//         var source = document.getElementById('doT').innerHTML;
+//         var doTtmpl = doT.template(source);
+//         for (var i = 0; i < number; i++) {
+//             doTtmpl(data);
+//         }
+//     }
+// }, {
+//     name: 'ejs',
+//     tester: function() {
+//         var source = document.getElementById('ejs').innerHTML;
+//         for (var i = 0; i < number; i++) {
+//             ejs.render(source, data);
+//         }
+//     }
+// }, {
+//     name: 'underscore',
+//     tester: function() {
+//         var source = document.getElementById('underscoreTemplate').innerHTML;
+//         var fn = _.template(source);
+//         for (var i = 0; i < number; i++) {
+//             fn(data);
+//         }
+//     }
+// }, {
     name: 'lt',
     tester: function() {
         var fn = lt('lt');
