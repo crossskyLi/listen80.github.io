@@ -1,7 +1,7 @@
 ~ function () {
     var cache = {};
 
-    function leaf(tpl, id) {
+    function lt(tpl, id) {
         tpl += ''
         var el;
         if (cache[tpl]) {
@@ -16,7 +16,7 @@
     function build(tpl) {
         var func = compile(tpl);
         return function (data) {
-            return func.call(leaf, data);
+            return func.call(lt, data);
         }
     };
 
@@ -136,13 +136,13 @@
         return new Function("$d", code);;
     }
 
-    leaf.$e = escape;
-    leaf.$f = forEach;
-    leaf.$s = toString;
+    lt.$e = escape;
+    lt.$f = forEach;
+    lt.$s = toString;
 
     if (typeof module === 'object') {
-        module.exports = leaf;
+        module.exports = lt;
     } else {
-        this.leaf = leaf;
+        this.lt = lt;
     }
 }();

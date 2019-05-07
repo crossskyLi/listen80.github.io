@@ -120,9 +120,9 @@ var testList = [{
         }
     }
 }, {
-    name: 'leaf',
+    name: 'lt',
     tester: function() {
-        var fn = leaf('leaf');
+        var fn = lt('lt');
         for (var i = 0; i < number; i++) {
             fn(data);
         }
@@ -222,7 +222,7 @@ window.onload = function() {
     var time = 4;
     var timer = setInterval(function() {
         time--;
-        var txt = '模板引擎leafjs速度测试'
+        var txt = '模板引擎ltjs速度测试'
         if(time) {
             txt += '(' + time + ')';
         } else {

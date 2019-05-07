@@ -1,4 +1,4 @@
-var projects = 'Resume,Tank,Man,Xiangqi,Chess,Gemoku,Mines,Fnline,Error,Code,Leaf,Help'.split(',');
+var projects = 'Resume,Tank,Man,Xiangqi,Chess,Gemoku,Mines,Fnline,Error,Code,LT,Help'.split(',');
 var html = '';
 var entry = document.querySelector('.entry');
 projects.forEach(function(v, i) {
