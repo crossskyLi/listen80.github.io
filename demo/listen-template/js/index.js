@@ -220,9 +220,9 @@ var startTest = function () {
 window.onload = function () {
   var h1 = document.getElementsByTagName('h1')[0];
   var time = 4;
-  var timer = setInterval(function () {
+  function next() {
     time--;
-    var txt = '模板引擎ltjs速度测试'
+    var txt = '模板引擎速度测试'
     if (time) {
       txt += '(' + time + ')';
     } else {
@@ -230,5 +230,7 @@ window.onload = function () {
       setTimeout(startTest);
     }
     h1.innerText = txt;
-  }, 1000)
+  }
+  next();
+  var timer = setInterval(next, 1000)
 }

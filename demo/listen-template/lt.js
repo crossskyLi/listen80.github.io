@@ -133,7 +133,7 @@
             i % 2 === 0 ? code += for_html(codes[i]) : code += for_js(codes[i]);
         }
         code += "return $o;";
-        return new Function("$data", code);;
+        return new Function("$d", code);;
     }
 
     lt.$e = escape;
