@@ -39,9 +39,9 @@ function loading() {
   canvasContext.fillText("正在载入", 128, 100)
 }
 
-function start() {
+function nextFrame() {
   nes.frame()
-  id = requestAnimationFrame(frame)
+  id = requestAnimationFrame(nextFrame)
 }
 
 var xhr
@@ -83,7 +83,7 @@ ajax('roms.json').then((data) => {
       ajax('roms/' + v, true).then((rom) => {
 
         nes.loadROM(rom)
-        start()
+        nextFrame()
       })
     }
     !i && li.onclick()
