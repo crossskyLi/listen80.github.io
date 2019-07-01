@@ -11,17 +11,13 @@
     <script src="http://cdn.bootcss.com/highlight.js/9.15.8/highlight.min.js"></script>
     <link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.15.8/styles/monokai-sublime.min.css">
     <style>
-        div#app {
+        #app {
             max-width: 1024px;
             min-height: 200px;
             border: 1px dashed lime;
             border-radius: 20px;
             margin: auto;
             padding: 10px;
-        }
-
-        img {
-            max-width: 100%;
         }
 
         #content pre {
@@ -96,15 +92,7 @@
         }
 
         #content img {
-            max-width: 90%;
-            display: block;
-
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 40px;
-            margin-bottom: 40px;
-
-            border-radius: 5px;
+            max-width: 100%;
         }
 
         #content ul {
@@ -181,12 +169,19 @@
         #content table tr:nth-child(2n) {
             background-color: #f8f8f8
         }
+
+        #button {
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
     <div id="content">
         <div id="app"></div>
+    </div>
+    <div id="button">
+        <button id="upload">Upload</button>
     </div>
     <script>
         const app = document.querySelector('#app')
@@ -199,15 +194,15 @@
             loadFile(file)
         }
 
-        // document.onclick = function () {
-        //     var input = document.createElement('input')
-        //     input.type = "file"
-        //     input.accept = "image/gif, image/jpeg, image/png"
-        //     input.onchange = function (e) {
-        //         loadFile(this.files[0])
-        //     }
-        //     input.click()
-        // }
+        document.querySelector('#upload').onclick = function () {
+            var input = document.createElement('input')
+            input.type = "file"
+            input.accept = "image/gif, image/jpeg, image/png"
+            input.onchange = function (e) {
+                loadFile(this.files[0])
+            }
+            input.click()
+        }
 
         var md = localStorage.getItem('md')
         if (md) {
