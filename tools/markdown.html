@@ -222,7 +222,7 @@
             localStorage.setItem('md', md)
             input.value = md
             out.innerHTML = marked(md)
-            hljs.initHighlightingOnLoad()
+            hljs.initHighlighting()
         }
         
         var md = localStorage.getItem('md') || '# hello'
