@@ -11,13 +11,25 @@
     <script src="https://cdn.bootcss.com/highlight.js/9.15.8/highlight.min.js"></script>
     <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.15.8/styles/monokai-sublime.min.css">
     <style>
-        #app {
-            max-width: 1024px;
-            min-height: 200px;
+        body {
+            margin: 0;
+        }
+
+        #content {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        #content>div {
             border: 1px dashed lime;
-            border-radius: 20px;
-            margin: auto;
+            border-radius: 8px;
             padding: 10px;
+            height: 95%;
+            width: 45%;
+            box-sizing: border-box;
         }
 
         #content pre {
@@ -170,31 +182,65 @@
             background-color: #f8f8f8
         }
 
-        #button {
-            text-align: center;
+        #input {
+            height: 100%;
+            width: 100%;
+            resize: none;
+            padding: 0;
+            border: none;
+            outline: none;
+        }
+
+        #out {
+            overflow: auto;
         }
     </style>
 </head>
 
 <body>
     <div id="content">
-        <div id="app"></div>
-    </div>
-    <div id="button">
-        <button id="upload">Upload</button>
+        <div id="out"></div>
+        <div><textarea id="input" cols="30" rows="10"></textarea></div>
     </div>
     <script>
-        const app = document.querySelector('#app')
-        app.ondragover = function (e) {
+
+        var input = document.querySelector('#input')
+        input.onkeyup = function () {
+            render(this.value)
+        }
+
+        input.ondragover = function (e) {
             e.preventDefault()
         }
-        app.ondrop = function (e) {
+        input.ondrop = function (e) {
             e.preventDefault()
             var file = e.dataTransfer.files[0]
             loadFile(file)
         }
 
-        document.querySelector('#upload').onclick = function () {
+        function render(md) {
+            localStorage.setItem('md', md)
+            input.value = md
+            out.innerHTML = marked(md)
+            hljs.initHighlightingOnLoad()
+        }
+        
+        var md = localStorage.getItem('md') || '# hello'
+        if (md) {
+            render(md)
+        }
+
+        function loadFile(file, fn) {
+            if (file) {
+                var reader = new FileReader()
+                reader.onload = function (e) {
+                    render(e.target.result)
+                }
+                reader.readAsText(file)
+            }
+        }
+
+        input.oncontextmenu = function () {
             var input = document.createElement('input')
             input.type = "file"
             input.accept = "image/gif, image/jpeg, image/png"
@@ -202,24 +248,7 @@
                 loadFile(this.files[0])
             }
             input.click()
-        }
-
-        var md = localStorage.getItem('md')
-        if (md) {
-            app.innerHTML = marked(JSON.parse(md))
-            hljs.initHighlightingOnLoad()
-        }
-
-        function loadFile(file, fn) {
-            if (file) {
-                var reader = new FileReader()
-                reader.onload = function (e) {
-                    localStorage.setItem('md', JSON.stringify(e.target.result))
-                    app.innerHTML = marked(e.target.result)
-                    hljs.initHighlightingOnLoad()
-                }
-                reader.readAsText(file)
-            }
+            return false
         }
     </script>
 </body>
