@@ -1,4 +1,4 @@
-﻿html {
+html {
   height: 100%;
 }
 body {
@@ -270,8 +270,16 @@ body {
   background-color: rgb(15, 168, 244);
 }
 .workContent {
-  text-align: center;
   min-width: 1250px;
+  text-align: center;
+}
+.workContent ol {
+  padding: 0;
+  text-align: left;
+  list-style-position: inside;
+}
+.workContent li {
+  margin-top: 8px;
 }
 .workContent > div {
   display: inline-block;
